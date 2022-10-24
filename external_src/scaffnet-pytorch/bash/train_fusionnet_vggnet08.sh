@@ -1,0 +1,60 @@
+#!bin/bash
+
+export CUDA_VISIBLE_DEVICES=0
+
+python src/train_fusionnet.py \
+--train_image_path training/kitti_train_image-clean.txt \
+--train_dense_depth_path training/kitti_train_predict_depth-clean.txt \
+--train_sparse_depth_path training/kitti_train_sparse_depth-clean.txt \
+--train_camera_path training/kitti_train_intrinsics-clean.txt \
+--val_image_path validation/kitti_val_image.txt \
+--val_dense_depth_path validation/kitti_val_predict_depth.txt \
+--val_ground_truth_path validation/kitti_val_semi_dense_depth.txt \
+--n_batch 8 \
+--n_height 320 \
+--n_width 768 \
+--encoder_type vggnet08 \
+--input_type input_depth, sparse_depth, validity_map \
+--n_filters_encoder_image 48 96 192 384 384 \
+--n_filters_encoder_depth 16 32 64 128 128 \
+--decoder_type multi-scale \
+--output_type multiplier residual \
+--n_filters_decoder 256 128 128 64 8 \
+--deconv_type up \
+--weight_initializer xavier_normal \
+--activation_func leaky_relu \
+--output_func_multiplier sigmoid \
+--output_func_residual linear \
+--pose_type forward backward \
+--rotation_param axis \
+--n_epoch 50 \
+--learning_rates 5e-5 1e-4 2e-4 1e-4 5e-5 1e-5 \
+--learning_schedule 2 8 20 30 45 \
+--use_data_augmentation \
+--n_random_shift_position 3 \
+--w_color 0.15 \
+--w_structure 0.85 \
+--w_sparse_depth 0.80 \
+--w_smoothness 0.05 \
+--w_prior_depth 0.00 \
+--threshold_prior_depth 0.30 \
+--w_weight_decay_depth 0.00 \
+--w_weight_decay_pose 0.00 \
+--outlier_removal_method remove \
+--outlier_removal_kernel_size 7 \
+--outlier_removal_threshold 1.5 \
+--scale_match_method none \
+--scale_match_kernel_size 1 \
+--min_predict_depth 1.5 \
+--max_predict_depth 100 \
+--min_multiplier_depth 0.25 \
+--max_multiplier_depth 4.00 \
+--min_residual_depth -100.0 \
+--max_residual_depth 100.0 \
+--min_evaluate_depth 0.0 \
+--max_evaluate_depth 100.0 \
+--n_summary 1000 \
+--n_checkpoint 5000 \
+--checkpoint_path trained_fusionnet_models/vgg08-xnorm-ax_co020_st080_sz050_sm010_pc000_wd000_wp000_lr5e5-1e4-2e4-1e4-5e5-1e5_mult-min025max4_res-min100-max100 \
+--device gpu \
+--n_thread 8 \

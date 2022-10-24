@@ -1,0 +1,11 @@
+.vscode
+data
+run_jobs*.sh
+src/__pycache__
+training
+validation
+testing
+scaffnet_models
+fusionnet_models
+trained_scaffnet_models
+trained_fusionnet_models
