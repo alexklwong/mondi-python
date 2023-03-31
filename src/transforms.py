@@ -139,7 +139,7 @@ class Transforms(object):
         for idx, images in enumerate(images_arr):
             # In case user pass in [0, 255] range image as float type
             if torch.max(images) > 1.0:
-                images_arr[idx] = images.int()
+                images_arr[idx] = images.to(torch.uint8)
 
         if self.do_random_brightness:
 
