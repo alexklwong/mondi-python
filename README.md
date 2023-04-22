@@ -4,7 +4,7 @@ PyTorch implementation of *Monitored Distillation for Positive Congruent Depth C
 
 Published in the proceedings of ECCV 2022
 
-[[publication]]() [[arxiv]](https://arxiv.org/pdf/2203.16034.pdf) [[poster]]() [[talk]]()
+[[publication]]() [[arxiv]](https://arxiv.org/pdf/2203.16034.pdf) [[poster]](https://drive.google.com/file/d/1P97f4ltZc02NI7-jKA3wYLLoIgKqqbU9/view?usp=sharing) [[talk]](https://drive.google.com/file/d/10vNcfTa-tLXVvm7xgj81SGuYpftGwJfE/view?usp=sharing)
 
 Model have been tested on Ubuntu 20.04 using Python 3.7, 3.8,  PyTorch 1.7.1, (CUDA 10.1), 1.9.1 (CUDA 11.1)
 
