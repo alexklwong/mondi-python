@@ -41,17 +41,17 @@ To follow the literature and benchmarks for this task, you may visit:
 ## About Monitored Distillation <a name="about-monitored-distillation"></a>
 
 ### Motivation:
-With the rapid progress of deep learning, many pretrained models are available online. Knowledge distillation is an effective way to learn from these models ( teachers ) by distilling information to a target model (student). However, the ability to effectively distill knowledge hinges on the fact that we can choose good teachers to learn from. This is easy if ground truth is available as it can be used to evaluate each teacher. However, ground truth is often either unavailable or extremely difficult to obtain, such as in the case of depth estimation. 
+With the rapid progress of deep learning, many pretrained models are available online. Knowledge distillation is an effective way to learn from these models ( teachers ) by distilling information to a target model (student). However, the ability to effectively distill knowledge hinges on the fact that we can choose good teachers to learn from. This is easy if ground truth is available as it can be used to evaluate each teacher. However, ground truth is often either unavailable or extremely difficult to obtain, such as in the case of depth estimation.
 Specifically, we focus on the task of depth completion, which involves densifying a sparse point cloud through guidance from camera images, or multi-sensor fusion. Any attempt to extrapolate the missing depth values typically fails since the point cloud is too sparse. Point cloud densification is an ill-posed problem, meaning there is an infinite hypothesis space due to ambiguities such as scale. Thus, the output is dependent on prior assumptions, biases, or regularization. This can come from hand-crafted methods like local smoothness, synthetic data, or even pretrained models, etc. In this work, we leverage the abundance of pretrained models as teachers to distill these regularities.
-Distilling teacher models is not a trivial task. Different teachers have various error modes. Taking a mean of the ensemble results in the union of the error modes. Instead, we envision selectively combining the ensemble of teachers such that we only distill from teachers that can correctly recover the 3D scene such that the distilled depth map is positive congruent, where the result has lower error than any individual teacher. 
+Distilling teacher models is not a trivial task. Different teachers have various error modes. Taking a mean of the ensemble results in the union of the error modes. Instead, we envision selectively combining the ensemble of teachers such that we only distill from teachers that can correctly recover the 3D scene such that the distilled depth map is positive congruent, where the result has lower error than any individual teacher.
 
 ### Our Solution:
 
 #### Use of geometric constraints as a validation criterion:
 We propose to use geometric constraints of the observations as a validation criterion to evaluate the performance of each teacher. Given calibrated images captured from different views of the same scene and a synchronized sparse point cloud, we propose to measure the correctness of each pretrained model based on whether or not their predictions can generate the images and sparse point clouds observed. Specifically, we reconstruct a target view from other observed views via photometric reprojection and measure its reconstruction error w.r.t the target using SSIM, a structural similarity index. Additionally, we also measure the deviation of the predicted point cloud from the sparse range measurements. Using the image and point cloud reconstruction errors, we can compose predictions from the ensemble by selecting those that best minimize the errors. The result is the distilled depth map, which can be used to train a student model.
 
-#### What happens if all teacher networks perform poorly? 
-To avoid distilling the error modes common to all teachers, we propose a function to “monitor” their performance. This monitor is manifested as an adaptive weighting scheme derived by interpreting the error map as a negative log-likelihood. Higher errors yield lower weights to limit the influence of the teachers and instead fall back on image and sparse point cloud reconstruction as unsupervised losses. 
+#### What happens if all teacher networks perform poorly?
+To avoid distilling the error modes common to all teachers, we propose a function to “monitor” their performance. This monitor is manifested as an adaptive weighting scheme derived by interpreting the error map as a negative log-likelihood. Higher errors yield lower weights to limit the influence of the teachers and instead fall back on image and sparse point cloud reconstruction as unsupervised losses.
 
 <center>
 <img src="figures/teacher-compare.gif">
@@ -59,6 +59,11 @@ To avoid distilling the error modes common to all teachers, we propose a functio
 
 The figure above shows the outputs of 2 teacher models - ENet and KBNet. ENet has errors in the paper cutter and cabinet regions of the scene. Averaging over them will shift the correct prediction of KBNet towards incorrect ones due to errors introduced by ENet. Hence, distilling from ENet would introduce these errors into the downstream student model.
 However, our method allows us to selectively combine the ensemble of teachers and avoid their error modes. Our student model avoids the highlighted error modes of ENET by selectively distilling from KBNet. We call this process <b>monitored distillation </b>.
+
+Training with MonDi yields real-time depth completion systems as seen in the demo below:
+<center>
+<img src="figures/real_time_depth_estimation.gif">
+</center>
 
 
 ## Setting up your virtual environment <a name="set-up-virtual-environment"></a>
