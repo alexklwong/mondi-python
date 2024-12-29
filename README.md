@@ -13,6 +13,17 @@ Authors: [Tian Yu Liu](https://www.linkedin.com/in/tian-yu-liu), [Parth Agrawal]
 
 If this work is useful to you, please cite our paper:
 
+```
+@inproceedings{liu2022monitored,
+  title={Monitored distillation for positive congruent depth completion},
+  author={Liu, Tian Yu and Agrawal, Parth and Chen, Allison and Hong, Byung-Woo and Wong, Alex},
+  booktitle={European Conference on Computer Vision},
+  pages={35--53},
+  year={2022},
+  organization={Springer}
+}
+```
+
 **Table of Contents**
 1. [About sparse-to-dense depth completion](#about-sparse-to-dense)
 2. [About Monitored Distillation (MonDi)](#about-monitored-distillation)
